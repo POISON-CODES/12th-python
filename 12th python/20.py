@@ -57,7 +57,7 @@ def search():
 def main():
     letter = input('Enter "w" for writing, "r" for reading, "u" to update, "s" for search, "d" for delete.')
     lett = letter[0]
-    if lett in "wrus":
+    if lett in "wrusd":
         if lett == "w":
             write()
         elif lett == "r":
@@ -73,21 +73,24 @@ def main():
         print('invalid choice.')
 
 def delete():
-    f = open('students.dat', 'rb')
-    input = int(input('Enter roll number'))
-    try:
-        list=[]
-        while True:
-            z=f.tell()
-            data = pickle.load(f)
-            temp_list = []
-            temp_list.append(data[0])
-            temp_list.append(data[1])
-            list.append([temp_list])
-            temp_list = []
-        
-        pickle.dump(list, f)
-    read()
+        f = open('students.dat', 'rb')
+        roll = int(input('Enter Roll number of student to delete.:'))
+
+        final_list = []
+        try:
+            while True:
+                data=pickle.load(f)
+                if data[0] != roll:
+                    final_list.append(data)
+                else:
+                    continue
+        except EOFError:
+            f.close()         
+
+        f=open('students.dat','wb')
+        pickle.dump(final_list,f)
+        f.close()
+        read()
 
 if __name__ == "__main__":
     write()
